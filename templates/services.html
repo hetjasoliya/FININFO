@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+{% block head %}
+{{ super() }}
+<title>FinINFO - Services</title>
+{% endblock %}
+{% block scripts %}
+    {{ bootstrap.load_js() }}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
+{% block content %}
+    {{ super() }}
+    <div class="container py-5" style="margin-top: 60px; max-width: 650px;">
+        <div class="card shadow-lg border-0">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4 text-primary fw-bold">Our Services</h2>
+                <p class="text-center text-secondary mb-4">At FININFO, we offer historical data for instruments on stock exchanges to help you make informed decisions.</p>
+                <form method="POST" class="needs-validation" novalidate>
+                    {{ stock_dataform.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ stock_dataform.symbol.label(class="form-label fw-semibold") }}
+                        {{ stock_dataform.symbol(class="form-control", placeholder="Enter Stock Symbol") }}
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            {{ stock_dataform.startdate.label(class="form-label fw-semibold") }}
+                            {{ stock_dataform.startdate(class="form-control") }}
+                        </div>
+                        <div class="col mb-3">
+                            {{ stock_dataform.enddate.label(class="form-label fw-semibold") }}
+                            {{ stock_dataform.enddate(class="form-control") }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        {{ stock_dataform.interval1.label(class="form-label fw-semibold") }}
+                        {{ stock_dataform.interval1(class="form-control", placeholder="e.g., 1d, 1wk, 1mo") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ stock_dataform.sma_ema.label(class="form-label fw-semibold") }}
+                        {{ stock_dataform.sma_ema(class="form-select", id="sma_ema_select") }}
+                    </div>
+                    <div id="sma-fields" style="display:none;">
+                        <div class="row">
+                            <div class="col mb-3">
+                                {{ stock_dataform.sma1.label(class="form-label fw-semibold") }}
+                                {{ stock_dataform.sma1(class="form-control", placeholder="SMA Window-1") }}
+                            </div>
+                            <div class="col mb-3">
+                                {{ stock_dataform.sma2.label(class="form-label fw-semibold") }}
+                                {{ stock_dataform.sma2(class="form-control", placeholder="SMA Window-2") }}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="ema-fields" style="display:none;">
+                        <div class="row">
+                            <div class="col mb-3">
+                                {{ stock_dataform.ema1.label(class="form-label fw-semibold") }}
+                                {{ stock_dataform.ema1(class="form-control", placeholder="EMA Window-1") }}
+                            </div>
+                            <div class="col mb-3">
+                                {{ stock_dataform.ema2.label(class="form-label fw-semibold") }}
+                                {{ stock_dataform.ema2(class="form-control", placeholder="EMA Window-2") }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        {{ stock_dataform.submit(class="btn btn-primary btn-lg") }}
+                    </div>
+                </form>
+                {% if result_message %}
+                    <div class="alert alert-info mt-4 text-center">{{ result_message }}</div>
+                {% endif %}
+                
+            </div>
+        </div>
+    </div>
+    {% if table_data %}
+        <div class="mt-2 text-center">
+            <h4 class="mb-3">Result Plot:</h4>
+            <img src="data:image/png;base64,{{ plot_url }}" class="img-fluid rounded border shadow" alt="Result Plot" style="max-height:850px; max-width:100%;">
+        </div>
+    {% endif %}
+    {% if table_data %}
+        <div class="mt-4 text-center">
+            <h4 class="mb-3">Data Table:</h4>
+                <div class="table-card table-striped table-bordered shadow align-items-center" style="max-height: 650px; max-width: fit-content; overflow-y: auto; overflow-x: auto;">
+                    {{ table_data|safe }}
+                </div>
+        </div>
+    {% endif %}
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function toggleFields() {
+            var val = document.getElementById('sma_ema_select').value;
+            document.getElementById('sma-fields').style.display = (val === 'SMA') ? 'block' : 'none';
+            document.getElementById('ema-fields').style.display = (val === 'EMA') ? 'block' : 'none';
+        }
+        document.getElementById('sma_ema_select').addEventListener('change', toggleFields);
+        toggleFields(); // Initial call
+    });
+    </script>
+            
+        
+
+{% endblock %}
+
+{% block styles %}
+    {{ bootstrap.load_css() }}
+    <style>
+        body {
+            background: #f8fafc;
+        }
+        .card {
+            border-radius: 1.25rem;
+        }
+        .form-label {
+            color: #0d6efd;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #0d6efd 60%, #0dcaf0 100%);
+            border: none;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #0dcaf0 0%, #0d6efd 100%);
+        }
+    </style>
+{% endblock %}
+

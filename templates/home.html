@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+{% block head %}
+    {{ super() }}
+    <title>FinINFO - Home</title>
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <div class="container d-flex align-items-center justify-content-center" style="min-height: 80vh; margin-top: 80px;">
+        <div class="card shadow-lg border-0 p-4 w-100" style="max-width: 700px; border-radius: 1.5rem;">
+            <div class="card-body text-center">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="FinINFO Logo" width="80" class="mb-3" />
+                <h1 class="card-title mb-3 text-primary fw-bold" style="font-size: 2.5rem;">Welcome to FinINFO</h1>
+                <p class="lead text-secondary mb-4">Your one-stop solution for financial information.</p>
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <div class="p-3 h-100 bg-light rounded shadow-sm">
+                            <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" alt="Data Analysis" width="48" class="mb-2">
+                            <h5 class="fw-semibold text-primary">Comprehensive Data Analysis</h5>
+                            <p class="text-secondary small">Analyze stocks with SMA/EMA, visualize trends, and make informed decisions using our interactive tools.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 h-100 bg-light rounded shadow-sm">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135789.png" alt="Secure Platform" width="48" class="mb-2">
+                            <h5 class="fw-semibold text-primary">Secure & Reliable</h5>
+                            <p class="text-secondary small">Your data is protected with industry-standard security. Enjoy fast, reliable access to financial insights anytime.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <div class="p-3 h-100 bg-light rounded shadow-sm">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" alt="User Friendly" width="48" class="mb-2">
+                            <h5 class="fw-semibold text-primary">User-Friendly Interface</h5>
+                            <p class="text-secondary small">Navigate easily with our intuitive dashboard and responsive design, optimized for all devices.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 h-100 bg-light rounded shadow-sm">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135773.png" alt="Support" width="48" class="mb-2">
+                            <h5 class="fw-semibold text-primary">Expert Support</h5>
+                            <p class="text-secondary small">Our team is here to help you with any questions or guidance you need on your financial journey.</p>
+                        </div>
+                    </div>
+                </div>
+                <a href="{{ url_for('services') }}" class="btn btn-outline-primary btn-lg mb-2 shadow-sm" >Explore Services</a>
+                <a href="{{ url_for('contactus') }}" class="btn btn-outline-primary btn-lg mb-2 shadow-sm">Contact Us</a>
+            </div>
+        </div>
+    </div>
+   
+
+    
+{% endblock %}
+
+
+
+{% block styles %}
+    {{ bootstrap.load_css() }}
+    <style>
+        body {
+            background: linear-gradient(120deg, #f8fafc 60%, #e3f2fd 100%);
+        }
+        .card {
+            background: #fff;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #0d6efd 60%, #0dcaf0 100%);
+            border: none;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #0dcaf0 0%, #0d6efd 100%);
+        }
+        .btn-outline-primary:hover {
+            background: #0d6efd;
+            color: #fff;
+        }
+        .shadow-sm {
+            box-shadow: 0 0.125rem 0.25rem rgba(13,110,253,.075)!important;
+        }
+       
+    </style>
+{% endblock %}
+
+{% block scripts %}
+    {{ bootstrap.load_js() }}
+    
+{% endblock %}
+
+
+
+
+

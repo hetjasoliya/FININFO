@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block head %}
+    {{ super() }}
+    <title>FinINFO - AI Chatbot</title>
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <div class="container py-5" style="margin-top: 80px; max-width: 800px;">
+        <div class="card shadow-lg border-0" style="border-radius: 1.5rem;">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" alt="AI Chatbot" width="60" class="mb-3" />
+                    <h1 class="card-title text-primary fw-bold mb-2">AI Financial Assistant</h1>
+                    <p class="lead text-secondary mb-0">Get instant answers to your financial questions with our AI-powered Assistant.</p>
+                </div>
+                
+                <form id="chatForm" class="needs-validation" novalidate>
+                    {{ form.hidden_tag() }}
+                    <div class="mb-4">
+                        {{ form.prompt.label(class="form-label fw-semibold") }}
+                        {{ form.prompt(class="form-control form-control-lg", placeholder="Ask me anything about finance, stocks, or investments...", rows="4") }}
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" id="submitBtn" class="btn btn-primary btn-lg">
+                            <i class="fas fa-paper-plane me-2"></i>Send Message
+                        </button>
+                    </div>
+                </form>
+                
+                
+                <div id="loading" class="text-center mt-4" style="display: none;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2 text-secondary">AI is thinking...</p>
+                </div>
+                
+                
+                <div id="responseContainer" class="mt-5" style="display: none;">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" alt="AI" width="30" class="me-2" />
+                        <h5 class="mb-0 text-primary fw-semibold">AI Response:</h5>
+                    </div>
+                    <div class="response-card p-4 rounded-3 bg-light border-start border-primary border-4">
+                        <div id="responseText" class="text-dark"></div>
+                        <div id="cursor" class="typing-cursor">|</div>
+                    </div>
+                </div>
+                
+                
+                <div class="mt-5">
+                    <h6 class="text-secondary mb-3">Sample Questions:</h6>
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-secondary btn-sm w-100 sample-question" data-question="What is SMA and EMA in stock analysis?">
+                                What is SMA and EMA in stock analysis?
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-secondary btn-sm w-100 sample-question" data-question="How does EMA differ from SMA?">
+                                How does EMA differ from SMA?
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-secondary btn-sm w-100 sample-question" data-question="What are the different technical indicators?">
+                                What are the different technical indicators?
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-secondary btn-sm w-100 sample-question" data-question="How to analyze stock trends?">
+                                How to analyze stock trends?
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    {{ bootstrap.load_css() }}
+    <style>
+        body {
+            background: linear-gradient(120deg, #f8fafc 60%, #e3f2fd 100%);
+        }
+        .typing-cursor {
+            display: inline-block;
+            animation: blink 1s infinite;
+            font-weight: bold;
+            color: #0d6efd;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        .response-card {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .sample-question {
+            border-radius: 20px;
+            transition: all 0.2s;
+            color: #0d6efd;
+        }
+        .sample-question:hover {
+            background: #0d6efd;
+            color: white;
+            border-color: #0d6efd;
+        }
+    </style>
+{% endblock %}
+
+{% block scripts %}
+    {{ bootstrap.load_js() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('chatForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const responseContainer = document.getElementById('responseContainer');
+            const responseText = document.getElementById('responseText');
+            const cursor = document.getElementById('cursor');
+            const promptInput = document.getElementById('prompt');
+            
+            
+            document.querySelectorAll('.sample-question').forEach(button => {
+                button.addEventListener('click', function() {
+                    const question = this.getAttribute('data-question');
+                    promptInput.value = question;
+                    const submitBtn = document.getElementById('submitBtn');
+                    submitBtn.click();
+                });
+            });
+            
+            
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const prompt = promptInput.value.trim();
+                if (!prompt) return;
+                
+                
+                submitBtn.disabled = true;
+                
+                loading.style.display = 'block';
+                responseContainer.style.display = 'none';
+                responseText.innerHTML = '';
+                cursor.style.display = 'inline-block';
+                
+                try {
+                    
+                    const formData = new FormData(form);
+                    
+                    const response = await fetch('/chatbot', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Network Error: ' + response.statusText);
+                    }
+                    
+                    
+                    loading.style.display = 'none';
+                    responseContainer.style.display = 'block';
+                    cursor.style.display = 'inline-block';
+                      
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    let buffer = '';
+                    
+                    while (true) {
+                        const { value, done } = await reader.read();
+                        if (done) break;
+                        
+                        const chunk = decoder.decode(value);
+                        buffer += chunk;
+                        
+                        const lines = buffer.split('\n');
+                        buffer = lines.pop(); 
+                        for (const line of lines) {
+                            if (line.startsWith('data: ')) {
+                                const content = line.slice(6);
+                                if (content === '[DONE]') {
+                                    cursor.style.display = 'none';
+                                    break;
+                                }
+                                if (content.trim()) {
+                                    
+                                    await new Promise(resolve => {
+                                        setTimeout(() => {
+                                            responseText.innerHTML += content;
+                                            
+                                            responseContainer.scrollIntoView({ behavior: 'smooth' });
+                                            resolve();
+                                        }, 35); 
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    loading.style.display = 'none';
+                    responseContainer.style.display = 'block';
+                    responseText.innerHTML = 'Sorry, there was an error processing your request.';
+                    cursor.style.display = 'none';
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Send Message';
+                }
+            });
+        });
+    </script>
+{% endblock %}

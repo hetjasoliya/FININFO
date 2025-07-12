@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {% block head %}
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        {% endblock %}
+         {% block styles %}
+            <!-- Bootstrap CSS -->
+            {{ bootstrap.load_css() }}
+            <style>
+                body {
+                    background: linear-gradient(120deg, #f8fafc 60%,rgb(91, 144, 182) 100%);
+                }
+                .navbar {
+                    background: linear-gradient(90deg, #0d6efd 60%, #0dcaf0 100%) !important;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+                    justify-items: center;
+                }
+                .navbar-brand img {
+                    height: 44px;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(13,110,253,.15);
+                }
+                .navbar-nav .nav-link {
+                    color: #f8fafc !important;
+                    font-size: 1.15rem;
+                    font-weight: 500;
+                    margin-right: 1rem;
+                    transition: color 0.2s, background 0.2s;
+                    border-radius: 0.5rem;
+                    padding: 0.5rem 1rem;
+                }
+                .navbar-nav .nav-link.active, .navbar-nav .nav-link:hover {
+                    background: #fff;
+                    color: #0d6efd !important;
+                }
+                .navbar-toggler {
+                    border: none;
+                    color:rgb(23, 86, 148);
+                }
+                .navbar-toggler:focus {
+                    box-shadow: none;
+                    color:rgb(23, 86, 148);
+                }
+                .div{
+                    display: flex;
+                    justify-content: center;
+                }
+                @media (max-width: 991.98px) {
+                    .navbar-nav .nav-link {
+                        margin-right: 0;
+                        margin-bottom: 0.5rem;
+                    }
+                }
+                
+            </style>
+        {% endblock %}
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg flex justify-content-center shadow navbar-dark bg-white fixed-top ">
+            <div class="container-fluid div">
+                <a class="navbar-brand d-flex" href="{{ url_for('home') }}">
+                    <img src="{{ url_for('static', filename='logo2.png') }}" alt="FinINFO Logo" height='40px' >
+                    <span class="ms-2 fw-bold" style="font-size: 1.5rem;  color:rgb(7, 99, 191);">FININFO</span>
+                </a>
+                <button class="navbar-toggler bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse " id="navbarNavAltMarkup">
+                    <div class="navbar-nav nav-underline">
+                        <a class="nav-link {% if request.path == url_for('home') %}fw-bold fw-underline{% endif %} " aria-current="page" href="{{ url_for('home') }}" style="color:rgb(7, 99, 191); font-size:1.5rem;">Home</a>
+                        <a class="nav-link {% if request.path == url_for('services') %}fw-bold{% endif %}" href="{{ url_for('services') }}" style="color:rgb(7, 99, 191); font-size:1.5rem;">Services</a>
+                        <a class="nav-link {% if request.path == url_for('contactus') %}fw-bold{% endif %}" href="{{ url_for('contactus') }}" style="color:rgb(7, 99, 191); font-size:1.5rem;">Contact Us</a>
+                        <a class="nav-link {% if request.path == url_for('about') %}fw-bold{% endif %}" href="{{ url_for('about') }}" style="color:rgb(7, 99, 191); font-size:1.5rem;">About Us</a>
+                        <a class="nav-link {% if request.path == url_for('chatbot') %}fw-bold{% endif %}" href="{{ url_for('chatbot') }}" style="color:rgb(7, 99, 191); font-size:1.5rem;">AI-Assistant</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        {% block content %}
+        
+
+        {% endblock %}
+        {% block chat %}
+        
+        {% endblock %}
+
+
+
+        {% block scripts %}
+            
+            {{ bootstrap.load_js() }}
+        {% endblock %}
+    </body>
+</html>
+
+    
